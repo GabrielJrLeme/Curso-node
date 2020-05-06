@@ -1,0 +1,25 @@
+# comeando projeto 
+
+#Rotas e conexoes 
+npm install express
+
+#Gerando paginas HTML
+npm install express-handlebars
+
+#
+npm install body-parser
+
+# Conectando com o MongoDb
+npm install mongooso
+
+# Nodemon para atualizar servidor
+npm install -d nodemon
+
+#
+npm install --save express-session
+
+# Flash para duração de tmp das msg
+npm install --save connect-flash
+
+#iniciar servidor
+nodemon app.js
