@@ -19,6 +19,7 @@
     "mongoose": "^5.9.12"
   },
   "devDependencies": {
+    "handlebars": "^4.5.0",
     "nodemon": "^2.0.3"
   }
 }

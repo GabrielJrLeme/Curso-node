@@ -39,11 +39,19 @@
         app.use(express.static(path.join(__dirname,'public')));
 
     //Mongoose
+        //Corrigir erros do mongo
         mongoose.Promise = global.Promise;
-        mongoose.connect("mongodb://localhost/blogapp").then(() => {
+        //Connect do mongo
+        mongoose.connect("mongodb://localhost/blogapp",{
+            useNewUrlParser:true,
+            useUnifiedTopology:true
+
+        }).then(() => {
             console.log("Banco de dados conectado...");
+
         }).catch((err) => {
             console.log("Erro de conexão => "+err);
+            
         });
 
 
@@ -65,4 +73,6 @@
     //escutando a porta
         app.listen(port,() => {
             console.log("Conectado...");
+            console.log("http://localhost:"+port);
         });
+        
