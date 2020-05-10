@@ -9,6 +9,11 @@
     const session = require('express-session');
     const flash = require('connect-flash');
 
+    require('./models/Categoria');
+    const Categoria = mongoose.model('categorias');
+
+    require('./models/Postagem');
+    const Postagem = mongoose.model('postagens');
 
 //configurações
     //Sessão
@@ -57,11 +62,26 @@
 
 //rotas
     app.get('/',(req,res) => {
-        res.send("Rota principal");
+
+        Postagem.find().populate('categoria').lean().sort({data:"desc"}).then((postagens) => {
+
+            res.render('index.handlebars',{postagens:postagens});
+
+        }).catch((err) => {
+
+            req.flash('error_msg',"Houve um erro au caregar as postagens");
+            res.redirect("/404");
+
+        });
+        
     });
 
+    app.get('/404',(req,res) => {
+        res.send("/404");
+    })
+
     app.get('/posts',(req,res) => {
-        res.send("Lista de posts");
+        
     });
 
     app.use('/admin',admin);
