@@ -76,13 +76,78 @@
         
     });
 
+
     app.get('/404',(req,res) => {
         res.send("/404");
-    })
-
-    app.get('/posts',(req,res) => {
-        
     });
+
+
+    app.get('/postagem/:slug',(req,res) => {
+
+        Postagem.findOne({slug:req.params.slug}).lean().then((postagem) => {
+
+
+            if(postagem){
+                res.render('postagem/index.handlebars',{postagem:postagem});
+            }else{
+                req.flash('error_msg',"Erro ao renderizar a página");
+                res.send("/404");
+            }
+
+        }).catch((err) => {
+            req.flash('error_msg',"Houve um erro interno");
+            res.send("/404");
+        })
+
+    });
+
+
+    app.get('/categorias',(req,res) => {
+        
+        Categoria.find().lean().then((categorias) => {
+
+            res.render('categoria/index.handlebars',{categorias:categorias});
+
+        }).catch((err) => {
+
+            req.flash('error_msg',"Houve um erro interno");
+            res.redirect("/");
+
+        });
+    });
+
+    app.get('/categorias/:slug',(req,res) => {
+
+        Categoria.findOne({slug:req.params.slug}).lean().then((categoria) => {
+
+            if(categoria){
+
+                Postagem.find({categoria:categoria._id}).lean().then((postagens) => {
+
+                    res.render('categoria/postagens.handlebars',{postagens:postagens,categoria:categoria});
+
+                }).catch((err) => {
+
+                    req.flash('error_msg',"Houve um erro interno");
+                    res.redirect("/");
+        
+                });
+
+                
+            }else{
+                req.flash('error_msg',"Categoria não existe");
+                res.redirect("/");                
+            }
+            
+
+        }).catch((err) => {
+
+            req.flash('error_msg',"Houve um erro interno");
+            res.redirect("/");
+
+        });
+
+    })
 
     app.use('/admin',admin);
 //outros
