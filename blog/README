@@ -23,3 +23,12 @@ npm install --save connect-flash
 
 #iniciar servidor
 nodemon app.js
+
+# Encriptando senha
+npm install --save bcryptjs
+
+# Autenticação
+npm install --save passport
+
+# Tipo de Autenticação
+npm install --save passport-local

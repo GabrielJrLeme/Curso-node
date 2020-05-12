@@ -1,0 +1,27 @@
+
+{{#each erro}}
+    <div class="alert alert-danger">{{texto}}</div>
+{{else}}
+
+{{/each}}
+
+<div class="card rounded shadow p-3 mb-5 bg-white rounded text-center" style="width: 500px; margin:auto;">
+
+
+    <form action="/usuarios/login" method="POST">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+
+        <br>
+
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" class="form-control" required>
+
+        <br>
+
+        <button type="submit" class="btn btn-outline-success">Login</button>    
+
+    </form>
+
+</div>
