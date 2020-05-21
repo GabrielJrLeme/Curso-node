@@ -4,6 +4,7 @@
     const bodyParser = require('body-parser');
     const app = express();
     const admin = require('./routes/admin');
+    const web = require('./routes/web');
     const usuarios = require('./routes/usuario');
     const path = require('path');
     const mongoose = require('mongoose');
@@ -51,7 +52,12 @@
         app.set('view engeni','handlebars');
 
     //Public
-        app.use(express.static(path.join(__dirname,'public')));
+        app.use(express.static(__dirname + '/public'));
+        app.use('/js', express.static(path.join(__dirname + '/node_modules/jquery/dist/'))); // redirect JS jQuery
+        app.use('/js', express.static(path.join(__dirname + '/node_modules/popper.js/dist/umd/'))); // redirect JS jQuery        
+        app.use('/js', express.static(path.join(__dirname + '/node_modules/bootstrap/dist/js'))); // redirect bootstrap JS
+        app.use('/css', express.static(path.join(__dirname + '/node_modules/bootstrap/dist/css'))); // redirect CSS bootstrap
+
 
     //Mongoose
         //Corrigir erros do mongo
@@ -71,94 +77,8 @@
 
 
 //rotas
-    app.get('/',(req,res) => {
-
-        Postagem.find().populate('categoria').lean().sort({data:"desc"}).then((postagens) => {
-
-            res.render('index.handlebars',{postagens:postagens});
-
-        }).catch((err) => {
-
-            req.flash('error_msg',"Houve um erro au caregar as postagens");
-            res.redirect("/404");
-
-        });
-        
-    });
-
-
-    app.get('/404',(req,res) => {
-        res.send("/404");
-    });
-
-
-    app.get('/postagem/:slug',(req,res) => {
-
-        Postagem.findOne({slug:req.params.slug}).lean().then((postagem) => {
-
-
-            if(postagem){
-                res.render('postagem/index.handlebars',{postagem:postagem});
-            }else{
-                req.flash('error_msg',"Erro ao renderizar a página");
-                res.send("/404");
-            }
-
-        }).catch((err) => {
-            req.flash('error_msg',"Houve um erro interno");
-            res.send("/404");
-        })
-
-    });
-
-
-    app.get('/categorias',(req,res) => {
-        
-        Categoria.find().lean().then((categorias) => {
-
-            res.render('categoria/index.handlebars',{categorias:categorias});
-
-        }).catch((err) => {
-
-            req.flash('error_msg',"Houve um erro interno");
-            res.redirect("/");
-
-        });
-    });
-
-    app.get('/categorias/:slug',(req,res) => {
-
-        Categoria.findOne({slug:req.params.slug}).lean().then((categoria) => {
-
-            if(categoria){
-
-                Postagem.find({categoria:categoria._id}).lean().then((postagens) => {
-
-                    res.render('categoria/postagens.handlebars',{postagens:postagens,categoria:categoria});
-
-                }).catch((err) => {
-
-                    req.flash('error_msg',"Houve um erro interno");
-                    res.redirect("/");
-        
-                });
-
-                
-            }else{
-                req.flash('error_msg',"Categoria não existe");
-                res.redirect("/");                
-            }
-            
-
-        }).catch((err) => {
-
-            req.flash('error_msg',"Houve um erro interno");
-            res.redirect("/");
-
-        });
-
-    })
-
+    
+    app.use('/',web);
     app.use('/admin',admin);
     app.use('/usuarios',usuarios);
 //outros

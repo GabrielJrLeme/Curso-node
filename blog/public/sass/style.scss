@@ -1,0 +1,9 @@
+// Custom.scss
+// Opção A: Importa todo o Bootstrap
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+// Suas sobrescrições de variáveis
+$body-bg: #000;
+$body-color: #111;
+
